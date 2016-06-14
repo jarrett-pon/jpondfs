@@ -24,18 +24,26 @@
         <!-- https://github.com/evanplaice/jquery-csv/ -->
         <script src="js/jquery.csv.min.js"></script>
         <script src="js/mlb_optimizer.js"></script>
+        <script src="js/scripts.js"></script>
 
     </head>
 
     <body>
-
-        <div class="container">
+        <div class = "container">
             <div id="top">
-                <div>
-                    <a href="index.php"><img alt="DFS" src="img/logo.png" style="max-width: 100%;"/></a>
+                <div class = "custom-navbar container">
+                    <div class = "logo nav">
+                        <a href="index.php"><img alt="DFS" src="img/logo.png"/></a>
+                    </div>
+                    <div class = "optimizer nav">
+                        <a href="optimizer.php">Optimizer</a>
+                    </div>
+                    <div class = "bankroll nav">
+                        <a href="bankroll.php">Bankroll</a>
+                    </div>
                 </div>
             </div>
 
-            <div id="middle">
+        <div id="middle">
 
 <!-- Dark graphic by <a href="http://yanlu.de">Yannick</a> from <a href="http://www.flaticon.com/">Flaticon</a> is licensed under <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0">CC BY 3.0</a>. Made with <a href="http://logomakr.com" title="Logo Maker">Logo Maker</a> -->

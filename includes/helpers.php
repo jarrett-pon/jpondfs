@@ -7,6 +7,13 @@
 
     require_once("config.php");
     /**
+     * Apologizes to user with message.
+     */
+    function apologize($message)
+    {
+        render("apology.php", ["message" => $message]);
+    }
+    /**
      * Facilitates debugging by dumping contents of argument(s)
      * to browser.
      */

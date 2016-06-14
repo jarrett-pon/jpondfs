@@ -1,0 +1,100 @@
+body
+{
+   background-color:#f5f5f5;
+}
+
+.container
+{
+  /* center contents */
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  padding: 0;
+}
+
+#top
+{
+  position:absolute;
+  left:0;
+  height:75px;
+  width:100vw;
+  background-color: darkslategrey;
+  margin-bottom:25px;
+}
+
+#middle
+{
+  margin-top:120px;
+}
+
+.custom-navbar
+{
+  text-align:left;
+}
+
+.nav
+{
+  display:inline-block;
+  margin: 0 10px;
+}
+
+.nav a
+{
+  color:white;
+}
+
+.logo img
+{
+  height: 75px;
+}
+
+.table
+{
+  background-color:white;
+  width:630px;
+  margin:auto;
+}
+
+.table thead tr
+{
+  background-color: darkcyan;
+  color: white;
+}
+
+.table th:not(:first-child)
+{
+  text-align:center;
+}
+
+.table tbody tr:nth-child(even)
+{
+  background-color: #dcdcdc;
+}
+
+.table th
+{
+  font-family:Helvetica;
+  font-weight:normal;
+  font-style:normal;
+  font-size:14px;
+}
+
+.player
+{
+  width:210px;
+}
+
+.status
+{
+  width:105px;
+}
+
+.team
+{
+  width:75px;
+}
+
+.position, .salary
+{
+  width:80px;
+}
