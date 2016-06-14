@@ -3,6 +3,6 @@
     // configuration
     require("../includes/config.php");
 
-    render("welcome.php");
+    render("bankroll.php");
 
 ?>

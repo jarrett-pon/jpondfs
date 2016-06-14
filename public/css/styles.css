@@ -1,0 +1,141 @@
+body
+{
+   background-color:#f5f5f5;
+}
+
+.container
+{
+  /* center contents */
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  padding: 0;
+}
+
+#top
+{
+  position:absolute;
+  left:0;
+  height:75px;
+  width:100vw;
+  background-color: darkslategrey;
+  margin-bottom:25px;
+}
+
+#middle
+{
+  margin-top:120px;
+}
+
+#bottom
+{
+  margin-bottom:50px;
+}
+
+.custom-navbar
+{
+  text-align:left;
+}
+
+.nav
+{
+  display:inline-block;
+  margin: 0 10px;
+}
+
+.nav a
+{
+  color:white;
+}
+
+.logo img
+{
+  height: 75px;
+}
+
+.table
+{
+  background-color:white;
+  width:630px;
+  margin:auto;
+}
+
+.table thead tr
+{
+  background-color: darkcyan;
+  color: white;
+}
+
+.table th:not(:first-child)
+{
+  text-align:center;
+}
+
+.table tbody tr:nth-child(even)
+{
+  background-color: #dcdcdc;
+}
+
+.table th
+{
+  font-family:Helvetica;
+  font-weight:normal;
+  font-style:normal;
+  font-size:11px;
+}
+
+.player
+{
+  width:210px;
+}
+
+.status
+{
+  width:105px;
+}
+
+.team
+{
+  width:75px;
+}
+
+.position, .salary
+{
+  width:80px;
+}
+
+.pitchersPagination, .battersPagination
+{
+  width:630px;
+  margin:auto;
+  position:relative;
+  border: 1px solid #dcdcdc;
+  border-top: none;
+  font-family: Helvetica;
+  font-size:14px;
+  font-weight:bold;
+  background-color: white;
+  padding: 5px 0;
+  -webkit-user-select: none;  /* Chrome all / Safari all */
+  -moz-user-select: none;     /* Firefox all */
+  -ms-user-select: none;      /* IE 10+ */
+  user-select: none;          /* Likely future */      
+}
+
+.next
+{
+  position:absolute;
+  right: 5px;
+}
+
+.previous
+{
+  position:absolute;
+  left: 5px;
+}
+
+.next:hover, .previous:hover
+{
+  cursor:pointer;
+  background-color: #dcdcdc;
+}

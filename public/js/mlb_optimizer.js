@@ -1,29 +1,22 @@
 const MAX_SALARY = 50000;
 const NUM_LUS = 5;
 //starts functions when document is loaded
-$(document).ready(function(){
-//request to get salary data to apply to NHL line up optimizer
-    $.ajax({
-        type:"GET",
-        url: "js/data/salaries_short_mlb.csv",
-        dataType: "text",
-        success: function(result) {
-            //start variable for testing run time
-            var start = performance.now();
-            //from jquery.csv.min.js converts csv file toObjects
-            //the first row as header is key. the values are subsequent rows in the column of corresponding header
-            //FOR THIS ALGORITHM THE DATA MUST BE SORTED FORM HIGHEST PROJECTED POITNS
-            var data = $.csv.toObjects(result);
-            var top_lus=[];
-            var test = search(data,top_lus);
-            console.log(test);
-            //end variable for testing run time
-            var end = performance.now();
-            //display total run time in ms
-            console.log((end-start)*0.001);
-        }
+function mlb_optimizer(data){
+    var start = performance.now();
+    //sort the data by points
+    data.sort(function(a,b){
+        return parseFloat(b.points) - parseFloat(a.points);
     });
-});
+    //if data exceeds certain length, run reducer on it
+    var top_lus=[];
+    var result = search(data,top_lus);
+    //end variable for testing run time
+    console.log(result);
+    var end = performance.now();
+    //display total run time in ms
+    console.log((end-start)*0.001);
+    return result;
+};
 //function to be used in mlb_data_to_positions, removes any duplicate players in given position
 function remove_duplicate_positions(players){
     var length_of_players = players.length;
@@ -43,6 +36,64 @@ function remove_duplicate_positions(players){
     new_players.push(players[length_of_players-1]);
     return new_players;
 };
+//Rosters must have no more than 5 hitters from any one MLB team.
+//Function to check if 6 or more players are on same team out of 8 players
+function check_lu_max_teams(lineup) {
+    var a = [], b = [], prev;
+    lineup.sort();
+    for ( var i = 0; i < lineup.length; i++ ) {
+        if ( lineup[i] !== prev ) {
+            a.push(lineup[i]);
+            b.push(1);
+        } 
+        else{
+            b[b.length-1]++;
+        }
+        prev = lineup[i];
+    }
+    //array b has number of times a duplicate team has occured
+    //if a duplicate team has occured more than 5 times, then it isn't valid.
+    for (var i = 0; i < b.length; i++){
+        if (b[i] > 5){
+            return false;
+        }
+    }
+    return true;
+}
+//function to find best value/high point players in case there are too many players to optimize
+function bestvalue(data, num_value, num_points){
+    var l=[];
+    //sort by highest value
+    data.sort(function(a,b) {
+        return parseFloat(b.value) - parseFloat(a.value);
+    });
+    for (var i = 0; i < num_value; i++){
+        l.push(data[i]);
+    }
+    //now sort by highest projected points 
+    data.sort(function(a,b){
+        return parseFloat(b.points) - parseFloat(a.points);
+    });
+    var y = 0;
+    var c = 0;
+    outerloop:
+    while (y < num_points){
+        for(var i = 0; i < l.length; i++){
+            if (l[i].player == data[c].player){
+                c++;
+                continue outerloop;
+            }
+        }
+        l.push(data[c]);
+        c++;
+        y++;
+    }
+    //make sure everything is returned by highest projected points
+    l.sort(function(a,b){
+        return parseFloat(b.points) - parseFloat(a.points);
+    });
+    return l;
+}
 //Takes all players and outputs arrays based on player's position
 function mlb_data_to_positions(data) {
     var pitcher = [];
@@ -52,10 +103,11 @@ function mlb_data_to_positions(data) {
     var third = [];
     var short = [];
     var outfield = [];
-
+    //need to add Value or points*1000/salary of each player to sort by that as well if reducing #of players needed.
     for (player in data){
         data[player].points = Number(data[player].points);
         data[player].salary = Number(data[player].salary);
+        data[player].value = data[player].points*1000/data[player].salary;
         if (data[player].position.indexOf("P") > -1) {
             pitcher.push(data[player]);
         }
@@ -85,6 +137,30 @@ function mlb_data_to_positions(data) {
     third = remove_duplicate_positions(third);
     short = remove_duplicate_positions(short);
     outfield = remove_duplicate_positions(outfield);
+    //check if data holds more than 130 players. If so, reduce to top 130 players so the optimizer works well.
+    if (data.length > 86){
+        if (pitcher.length > 6){
+            pitcher = bestvalue(pitcher,3,3);
+        }
+        if (catcher.length > 10){
+            catcher = bestvalue(catcher,5,5);
+        }
+        if (first.length > 10){
+            first = bestvalue(first,5,5);
+        }
+        if (second.length > 10){
+            second = bestvalue(second,5,5);
+        }
+        if (third.length > 10){
+            third = bestvalue(third,5,5);
+        }
+        if (short.length > 10){
+            short = bestvalue(short,5,5);
+        }
+        if (outfield.length > 30){
+            outfield = bestvalue(outfield,15,15);
+        }
+    }
     return {
         pitcher:pitcher,
         catcher:catcher,
@@ -201,10 +277,7 @@ function iterate(pitcher,catcher,first,second,third,short,outfield,position,p1,p
     else{
         return [0,0,0,0,0,0,0,0,0,0,0];
     }
-
 };
-
-
 //When a line up passes all constraints (salary and point constraint) this function is called
 //Determines the point value of the line up and if it is higher than one of the top three, it goes in and the last one goes out
 function check_lu(top_lus,current_lu_points,current_lu){
@@ -213,14 +286,12 @@ function check_lu(top_lus,current_lu_points,current_lu){
     top_lus.sort(function(a,b){
         return parseFloat(b.points) - parseFloat(a.points);
     });
-
     //when more than NUM_LUS, pop off the last one
     if (top_lus.length > NUM_LUS){
         top_lus.pop();
     }
     return top_lus;
 };
-
 //The main call function, checks the line up to see if it passes constraint, if yes continue to next position, if no then determine where the next iteration is and skip remaining iterations for that particular player in that position
 function search(data,top_lus){
     //Initial values
@@ -263,7 +334,6 @@ function search(data,top_lus){
             top_lus_min_points = top_lus[top_lus.length - 1].points;
         }
         var current_lu_points =  pitcher[p1].points + pitcher[p2].points + catcher[c].points + first[f].points + second[s].points + third[t].points + short[ss].points + outfield[of1].points + outfield[of2].points + outfield[of3].points;
-
         switch (position)
         {
             case 10:
@@ -334,7 +404,9 @@ function search(data,top_lus){
                 }
             case 1:
                 salary -= outfield[of3].salary;
-                if (salary >= 0 && current_lu_points > top_lus_min_points){
+                //need to check for teams
+                var hitters = [catcher[c].playerteam, first[f].playerteam, second[s].playerteam, third[t].playerteam, short[ss].playerteam, outfield[of1].playerteam, outfield[of2].playerteam, outfield[of3].playerteam];
+                if (salary >= 0 && current_lu_points > top_lus_min_points && check_lu_max_teams(hitters)){
                     var current_lu = [pitcher[p1],pitcher[p2],catcher[c],first[f],second[s],third[t],short[ss],outfield[of1],outfield[of2],outfield[of3]];
                     top_lus = check_lu(top_lus,current_lu_points,current_lu);
                     [position, p1, p2, c, f, s, t, ss, of1, of2, of3, salary] = iterate(pitcher,catcher,first,second,third,short,outfield,1,p1,p2,c,f,s,t,ss,of1,of2,of3,len_pitcher,len_catcher,len_first,len_second,len_third,len_short,len_outfield);
