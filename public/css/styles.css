@@ -27,6 +27,11 @@ body
   margin-top:120px;
 }
 
+#bottom
+{
+  margin-bottom:50px;
+}
+
 .custom-navbar
 {
   text-align:left;
@@ -76,7 +81,7 @@ body
   font-family:Helvetica;
   font-weight:normal;
   font-style:normal;
-  font-size:14px;
+  font-size:11px;
 }
 
 .player
@@ -97,4 +102,40 @@ body
 .position, .salary
 {
   width:80px;
+}
+
+.pitchersPagination, .battersPagination
+{
+  width:630px;
+  margin:auto;
+  position:relative;
+  border: 1px solid #dcdcdc;
+  border-top: none;
+  font-family: Helvetica;
+  font-size:14px;
+  font-weight:bold;
+  background-color: white;
+  padding: 5px 0;
+  -webkit-user-select: none;  /* Chrome all / Safari all */
+  -moz-user-select: none;     /* Firefox all */
+  -ms-user-select: none;      /* IE 10+ */
+  user-select: none;          /* Likely future */      
+}
+
+.next
+{
+  position:absolute;
+  right: 5px;
+}
+
+.previous
+{
+  position:absolute;
+  left: 5px;
+}
+
+.next:hover, .previous:hover
+{
+  cursor:pointer;
+  background-color: #dcdcdc;
 }

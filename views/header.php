@@ -25,6 +25,7 @@
         <script src="js/jquery.csv.min.js"></script>
         <script src="js/mlb_optimizer.js"></script>
         <script src="js/scripts.js"></script>
+        <script src="js/js_pagination.js"></script>
 
     </head>
 

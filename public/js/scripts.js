@@ -1,5 +1,11 @@
 $(document).ready(function(){
+<<<<<<< HEAD
+    var data = [],
+        pitchers = [],
+        batters = [];
+=======
     var data = [];
+>>>>>>> master
     $.ajax({
         url: "get_data.php",
         dataType:"json",
@@ -7,22 +13,16 @@ $(document).ready(function(){
             //This is where you handle what to do with the response.
             //The actual data is found on this.responseText
             //var result = JSON.parse(this.responseText);
-            var pitchers = result.pitcher_projections;
-            var batters = result.batter_projections;
-            var i = 1;
+            pitchers = result.pitcher_projections;
+            batters = result.batter_projections;
             for (var key in pitchers){
-                $('.pitchersTable').append("<tr><th>" + i + ". " + pitchers[key]["player"] +"</th><th>"+ pitchers[key]["status"]+"</th><th>"+ pitchers[key]["playerteam"]+"</th><th>"+pitchers[key]["position"]+"</th><th>"+pitchers[key]["salary"]+"</th><th>"+pitchers[key]["points"]+"</th></tr>");
-                i++;
                 data.push({position:pitchers[key]["position"], player:pitchers[key]["player"], salary:pitchers[key]["salary"], points:pitchers[key]["points"], playerteam:pitchers[key]["playerteam"]});
             }
-            var i = 1;
             for (var key in batters){
-                $('.battersTable').append("<tr><th>" + i + ". " + batters[key]["player"] +"</th><th>"+ batters[key]["status"]+"</th><th>"+ batters[key]["playerteam"]+"</th><th>"+batters[key]["position"]+"</th><th>"+batters[key]["salary"]+"</th><th>"+batters[key]["points"]+"</th></tr>");
-                i++;
                 data.push({position:batters[key]["position"], player:batters[key]["player"], salary:batters[key]["salary"], points:batters[key]["points"], playerteam:batters[key]["playerteam"]});
             }
-            $('.loadPlayers').hide();
-            $('.loadOptimizer').show();
+            paginate_data(pitchers, 'pitchers');
+            paginate_data(batters, 'batters');
         }
     });
 
@@ -39,5 +39,22 @@ $(document).ready(function(){
             }
             $('.lineups tbody:last').append("<tr><th></th><th></th><th><th></th></th><th>" + total_points.toFixed(2) + "</th></tr></tbody></table>");
         }
+    });
+
+    $('.next').on('click', function(){
+        var $parent = $(this).parent(),
+            max_results_per_page = 25,
+            index = $parent.data('index') + max_results_per_page,
+            type = $parent.data('player'),
+            array = type == 'pitchers' ? pitchers : batters;
+        paginate_data(array, type, index);
+    });
+    $('.previous').on('click', function(){
+        var $parent = $(this).parent(),
+            max_results_per_page = 25,
+            index = $parent.data('index') - max_results_per_page,
+            type = $parent.data('player'),
+            array = type == 'pitchers' ? pitchers : batters;
+        paginate_data(array, type, index);
     });
 });
