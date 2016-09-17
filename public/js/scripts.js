@@ -1,11 +1,7 @@
 $(document).ready(function(){
-<<<<<<< HEAD
     var data = [],
         pitchers = [],
         batters = [];
-=======
-    var data = [];
->>>>>>> master
     $.ajax({
         url: "get_data.php",
         dataType:"json",
