@@ -3,6 +3,14 @@
 	require('simple_html_dom.php');
 	$data_array =[];
 	$count = 1;
+	function edit_player_name($player_name){
+		switch($player_name){
+			case "Manny Pina":
+				return "Manuel Pina";
+			default:
+				return $player_name;
+		}
+	}
 
 	while (true){
 		$stats_page = file_get_html("http://espn.go.com/mlb/stats/batting/_/count/$count/qualified/false/minpa/25");
@@ -23,6 +31,7 @@
 			$runs = $row->find('td')[4]->plaintext;
 			$hr = $row->find('td')[8]->plaintext;
 			$walks = $row->find('td')[12]->plaintext;
+			$player = edit_player_name($player);
 			$gp = $expanded_stats_page->find('.oddrow, .evenrow')[$index]->find('td')[3]->plaintext;
 			array_push($data_array, ["player"=>$player,"avg"=>$avg,"obp"=>$obp,"slg"=>$slg,"ops"=>$ops,"sb"=>$sb,"rbi"=>$rbi,"runs"=>$runs,"hr"=>$hr,"walks"=>$walks,"gp"=>$gp]);
 		}

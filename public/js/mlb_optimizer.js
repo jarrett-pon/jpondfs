@@ -1,7 +1,7 @@
 const MAX_SALARY = 50000;
 const NUM_LUS = 5;
 //starts functions when document is loaded
-function mlb_optimizer(data){
+function mlb_optimizer(data,callback){
     var start = performance.now();
     //sort the data by points
     data.sort(function(a,b){
@@ -15,7 +15,7 @@ function mlb_optimizer(data){
     var end = performance.now();
     //display total run time in ms
     console.log((end-start)*0.001);
-    return result;
+    callback(result);
 };
 //function to be used in mlb_data_to_positions, removes any duplicate players in given position
 function remove_duplicate_positions(players){
@@ -54,7 +54,7 @@ function check_lu_max_teams(lineup) {
     //array b has number of times a duplicate team has occured
     //if a duplicate team has occured more than 5 times, then it isn't valid.
     for (var i = 0; i < b.length; i++){
-        if (b[i] > 5){
+        if (b[i] > 4){
             return false;
         }
     }
@@ -333,7 +333,10 @@ function search(data,top_lus){
         else{
             top_lus_min_points = top_lus[top_lus.length - 1].points;
         }
-        var current_lu_points =  pitcher[p1].points + pitcher[p2].points + catcher[c].points + first[f].points + second[s].points + third[t].points + short[ss].points + outfield[of1].points + outfield[of2].points + outfield[of3].points;
+        //need current points to see if it will be higher than current max
+        //need hitters to make sure there aren't more than 4 players on the same team
+        var current_lu_points =  pitcher[p1].points + pitcher[p2].points + catcher[c].points + first[f].points + second[s].points + third[t].points + short[ss].points + outfield[of1].points + outfield[of2].points + outfield[of3].points,
+            hitters = [catcher[c].playerteam, first[f].playerteam, second[s].playerteam, third[t].playerteam, short[ss].playerteam, outfield[of1].playerteam, outfield[of2].playerteam, outfield[of3].playerteam];
         switch (position)
         {
             case 10:
@@ -404,8 +407,6 @@ function search(data,top_lus){
                 }
             case 1:
                 salary -= outfield[of3].salary;
-                //need to check for teams
-                var hitters = [catcher[c].playerteam, first[f].playerteam, second[s].playerteam, third[t].playerteam, short[ss].playerteam, outfield[of1].playerteam, outfield[of2].playerteam, outfield[of3].playerteam];
                 if (salary >= 0 && current_lu_points > top_lus_min_points && check_lu_max_teams(hitters)){
                     var current_lu = [pitcher[p1],pitcher[p2],catcher[c],first[f],second[s],third[t],short[ss],outfield[of1],outfield[of2],outfield[of3]];
                     top_lus = check_lu(top_lus,current_lu_points,current_lu);

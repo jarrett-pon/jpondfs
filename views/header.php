@@ -26,6 +26,7 @@
         <script src="js/mlb_optimizer.js"></script>
         <script src="js/scripts.js"></script>
         <script src="js/js_pagination.js"></script>
+        <script src="js/js_search.js"></script>
 
     </head>
 
