@@ -1,7 +1,7 @@
 const MAX_SALARY = 50000;
 const NUM_LUS = 5;
 //starts functions when document is loaded
-function mlb_optimizer(data){
+function mlb_optimizer(data,callback){
     var start = performance.now();
     //sort the data by points
     data.sort(function(a,b){
@@ -15,7 +15,7 @@ function mlb_optimizer(data){
     var end = performance.now();
     //display total run time in ms
     console.log((end-start)*0.001);
-    return result;
+    callback(result);
 };
 //function to be used in mlb_data_to_positions, removes any duplicate players in given position
 function remove_duplicate_positions(players){
@@ -333,14 +333,17 @@ function search(data,top_lus){
         else{
             top_lus_min_points = top_lus[top_lus.length - 1].points;
         }
-        var current_lu_points =  pitcher[p1].points + pitcher[p2].points + catcher[c].points + first[f].points + second[s].points + third[t].points + short[ss].points + outfield[of1].points + outfield[of2].points + outfield[of3].points;
+        //need current points to see if it will be higher than current max
+        //need hitters to make sure there aren't more than 4 players on the same team
+        var current_lu_points =  pitcher[p1].points + pitcher[p2].points + catcher[c].points + first[f].points + second[s].points + third[t].points + short[ss].points + outfield[of1].points + outfield[of2].points + outfield[of3].points,
+            hitters = [catcher[c].playerteam, first[f].playerteam, second[s].playerteam, third[t].playerteam, short[ss].playerteam, outfield[of1].playerteam, outfield[of2].playerteam, outfield[of3].playerteam];
         switch (position)
         {
             case 10:
                 salary -= pitcher[p1].salary;
             case 9:
                 salary -= pitcher[p2].salary;
-                if (salary >= 16000 && current_lu_points > top_lus_min_points){
+                if (salary >= 16000 && current_lu_points > top_lus_min_points && check_lu_max_teams(hitters)){
                 }
                 else{
                     [position, p1, p2, c, f, s, t, ss, of1, of2, of3, salary] = iterate(pitcher,catcher,first,second,third,short,outfield,9,p1,p2,c,f,s,t,ss,of1,of2,of3,len_pitcher,len_catcher,len_first,len_second,len_third,len_short,len_outfield);
@@ -348,7 +351,7 @@ function search(data,top_lus){
                 }
             case 8:
                 salary -= catcher[c].salary;
-                if (salary >= 14000 && current_lu_points > top_lus_min_points){
+                if (salary >= 14000 && current_lu_points > top_lus_min_points && check_lu_max_teams(hitters)){
                 }
                 else{
                     [position, p1, p2, c, f, s, t, ss, of1, of2, of3, salary] = iterate(pitcher,catcher,first,second,third,short,outfield,8,p1,p2,c,f,s,t,ss,of1,of2,of3,len_pitcher,len_catcher,len_first,len_second,len_third,len_short,len_outfield);
@@ -356,7 +359,7 @@ function search(data,top_lus){
                 }
             case 7:
             salary -= first[f].salary;
-                if (salary >= 12000 && current_lu_points > top_lus_min_points){
+                if (salary >= 12000 && current_lu_points > top_lus_min_points && check_lu_max_teams(hitters)){
                 }
                 else{
                     [position, p1, p2, c, f, s, t, ss, of1, of2, of3, salary] = iterate(pitcher,catcher,first,second,third,short,outfield,7,p1,p2,c,f,s,t,ss,of1,of2,of3,len_pitcher,len_catcher,len_first,len_second,len_third,len_short,len_outfield);
@@ -364,7 +367,7 @@ function search(data,top_lus){
                 }
             case 6:
                 salary -= second[s].salary;
-                if (salary >= 10000 && current_lu_points > top_lus_min_points){
+                if (salary >= 10000 && current_lu_points > top_lus_min_points && check_lu_max_teams(hitters)){
                 }
                 else{
                     [position, p1, p2, c, f, s, t, ss, of1, of2, of3, salary] = iterate(pitcher,catcher,first,second,third,short,outfield,6,p1,p2,c,f,s,t,ss,of1,of2,of3,len_pitcher,len_catcher,len_first,len_second,len_third,len_short,len_outfield);
@@ -372,7 +375,7 @@ function search(data,top_lus){
                 }
             case 5:
                 salary -= third[t].salary;
-                if (salary >= 8000 && current_lu_points > top_lus_min_points){
+                if (salary >= 8000 && current_lu_points > top_lus_min_points && check_lu_max_teams(hitters)){
                 }
                 else{
                     [position, p1, p2, c, f, s, t, ss, of1, of2, of3, salary] = iterate(pitcher,catcher,first,second,third,short,outfield,5,p1,p2,c,f,s,t,ss,of1,of2,of3,len_pitcher,len_catcher,len_first,len_second,len_third,len_short,len_outfield);
@@ -380,7 +383,7 @@ function search(data,top_lus){
                 }
             case 4:
                 salary -= short[ss].salary;
-                if (salary >= 6000 && current_lu_points > top_lus_min_points){
+                if (salary >= 6000 && current_lu_points > top_lus_min_points && check_lu_max_teams(hitters)){
                 }
                 else{
                     [position, p1, p2, c, f, s, t, ss, of1, of2, of3, salary] = iterate(pitcher,catcher,first,second,third,short,outfield,4,p1,p2,c,f,s,t,ss,of1,of2,of3,len_pitcher,len_catcher,len_first,len_second,len_third,len_short,len_outfield);
@@ -388,7 +391,7 @@ function search(data,top_lus){
                 }
             case 3:
                 salary -= outfield[of1].salary;
-                if (salary >= 4000 && current_lu_points> top_lus_min_points){
+                if (salary >= 4000 && current_lu_points> top_lus_min_points && check_lu_max_teams(hitters)){
                 }
                 else{
                     [position, p1, p2, c, f, s, t, ss, of1, of2, of3, salary] = iterate(pitcher,catcher,first,second,third,short,outfield,3,p1,p2,c,f,s,t,ss,of1,of2,of3,len_pitcher,len_catcher,len_first,len_second,len_third,len_short,len_outfield);
@@ -396,7 +399,7 @@ function search(data,top_lus){
                 }
             case 2:
                 salary -= outfield[of2].salary;
-                if (salary >= 2000 && current_lu_points > top_lus_min_points){
+                if (salary >= 2000 && current_lu_points > top_lus_min_points && check_lu_max_teams(hitters)){
                 }
                 else{
                     [position, p1, p2, c, f, s, t, ss, of1, of2, of3, salary] = iterate(pitcher,catcher,first,second,third,short,outfield,2,p1,p2,c,f,s,t,ss,of1,of2,of3,len_pitcher,len_catcher,len_first,len_second,len_third,len_short,len_outfield);
@@ -404,8 +407,6 @@ function search(data,top_lus){
                 }
             case 1:
                 salary -= outfield[of3].salary;
-                //need to check for teams
-                var hitters = [catcher[c].playerteam, first[f].playerteam, second[s].playerteam, third[t].playerteam, short[ss].playerteam, outfield[of1].playerteam, outfield[of2].playerteam, outfield[of3].playerteam];
                 if (salary >= 0 && current_lu_points > top_lus_min_points && check_lu_max_teams(hitters)){
                     var current_lu = [pitcher[p1],pitcher[p2],catcher[c],first[f],second[s],third[t],short[ss],outfield[of1],outfield[of2],outfield[of3]];
                     top_lus = check_lu(top_lus,current_lu_points,current_lu);
