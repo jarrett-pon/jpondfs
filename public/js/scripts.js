@@ -119,7 +119,6 @@ $(document).ready(function(){
             }
         }
     });
-
     //Remove player from data and respective player list
     $('table').on('click', '.removePlayer', function(){
         var $this = $(this),
