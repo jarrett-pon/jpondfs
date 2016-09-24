@@ -3,6 +3,18 @@
 	require('simple_html_dom.php');
 	$data_array =[];
 	$count = 1;
+	//since we are using rotogrinders and gettign data from espn, names may not match
+	//switching from espn name to rotogrinders name to keep consistent
+	function edit_player_name($player_name){
+		switch($player_name){
+			case "Joe Musgrove":
+				return "Joseph Musgrove";
+			case "Buck Farmer":
+				return "Joe Farmer";
+			default:
+				return $player_name;
+		}
+	}
 
 	while (true){
 		$stats_page = file_get_html("http://espn.go.com/mlb/stats/pitching/_/count/$count/qualified/false/order/false/minip/30");
@@ -22,6 +34,7 @@
 			$walks = $row->find('td')[9]->plaintext;
 			$gp = $row->find('td')[3]->plaintext;
 			$ops = $expanded_stats_page->find('.oddrow, .evenrow')[$index]->find('td')[16]->plaintext;
+			$player = edit_player_name($player);
 			array_push($data_array, ["player"=>$player,"ip"=>$ip,"so"=>$so,"wins"=>$wins,"whip"=>$whip,"era"=>$era,"walks"=>$walks,"ops"=>$ops,"gp"=>$gp]);
 		}
 		$count += 40;

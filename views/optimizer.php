@@ -31,6 +31,7 @@
                         <th class="position">Position</th>
                         <th class="salary">Salary</th>
                         <th class="points">Points</th>
+                        <th class="remove">Remove</th>
                     </tr>
                 </thead>
                 <tbody class = "pitchersTable">
@@ -52,6 +53,7 @@
                         <th class="position">Position</th>
                         <th class="salary">Salary</th>
                         <th class="points">Points</th>
+                        <th class="remove">Remove</th>
                     </tr>
                 </thead>
                 <tbody class = "battersTable">

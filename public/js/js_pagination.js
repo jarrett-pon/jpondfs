@@ -13,7 +13,7 @@ function paginate_data(player_array,player_type,start_index = 0){
 	$tbody_selector.empty();
 	for(var i = start_index; i < start_index + results_per_page; i++){
 		var counter = i + 1;
-		$tbody_selector.append("<tr><th>" + counter + ". " + player_array[i]["player"] +"</th><th>"+ player_array[i]["status"]+"</th><th>"+ player_array[i]["playerteam"]+"</th><th>"+player_array[i]["position"]+"</th><th>"+player_array[i]["salary"]+"</th><th>"+player_array[i]["points"]+"</th></tr>");
+		$tbody_selector.append("<tr><th>" + counter + ". " + player_array[i]["player"] +"</th><th>"+ player_array[i]["status"]+"</th><th>"+ player_array[i]["playerteam"]+"</th><th>"+player_array[i]["position"]+"</th><th>"+player_array[i]["salary"]+"</th><th><input type='text' maxlength = '5' class = 'form-control points-input' data-player-type = '"+player_type+"' value = "+player_array[i]["points"]+"></th><th><img class = 'removePlayer' src = 'img/remove.png'</th></tr>");
 	}
 	$pages_selector.empty();
 	$pages_selector.append("Page " + page_number + " out of " + page_total);

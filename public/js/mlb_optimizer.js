@@ -54,7 +54,7 @@ function check_lu_max_teams(lineup) {
     //array b has number of times a duplicate team has occured
     //if a duplicate team has occured more than 5 times, then it isn't valid.
     for (var i = 0; i < b.length; i++){
-        if (b[i] > 5){
+        if (b[i] > 4){
             return false;
         }
     }

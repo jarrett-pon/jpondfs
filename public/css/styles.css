@@ -33,6 +33,27 @@ body
   margin-bottom:50px;
 }
 
+.introduction
+{
+  margin-top: 30px;
+  padding: 10px 0 50px 0;
+}
+
+.layer
+{
+  background-color: rgba(0, 0, 0, 0.35);
+  padding-top:120px;
+  height:100%
+}
+.information {
+  height: 350px;
+  margin: 0 -375px;
+  background-image: url(../img/dfsbackground.jpg);
+  background-position: 50% 70%;
+  background-repeat: no-repeat;
+  margin-top: -45px;
+  color: white;
+}
 .custom-navbar
 {
   text-align:left;
@@ -57,7 +78,7 @@ body
 .table
 {
   background-color:white;
-  width:630px;
+  width:660px;
   margin:auto;
 }
 
@@ -105,6 +126,15 @@ body
   width:80px;
 }
 
+.remove
+{
+  width:30px;
+}
+
+.removePlayer:hover
+{
+  cursor:pointer;
+}
 .pitchersPagination, .battersPagination, .sports, .positions
 {
   -webkit-user-select: none;  /* Chrome all / Safari all */
@@ -114,7 +144,7 @@ body
 }
 .pitchersPagination, .battersPagination
 {
-  width:630px;
+  width:660px;
   margin:auto;
   position:relative;
   border: 1px solid #dcdcdc;
@@ -215,10 +245,10 @@ body
   font-size: 10px;
   position: relative;
   text-indent: -9999em;
-  border-top: 1.1em solid rgba(255, 255, 255, 0.2);
-  border-right: 1.1em solid rgba(255, 255, 255, 0.2);
-  border-bottom: 1.1em solid rgba(255, 255, 255, 0.2);
-  border-left: 1.1em solid #ffffff;
+  border-top: 1.1em solid rgba(0, 0, 0, 0.2);
+  border-right: 1.1em solid rgba(0, 0, 0, 0.2);
+  border-bottom: 1.1em solid rgba(0, 0, 0, 0.2);
+  border-left: 1.1em solid #000000;
   -webkit-transform: translateZ(0);
   -ms-transform: translateZ(0);
   transform: translateZ(0);
@@ -252,3 +282,9 @@ body
   }
 }
 
+.points-input
+{
+  font-size: 11px;
+  height: 25px;
+  width: 60px;
+}

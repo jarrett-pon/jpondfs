@@ -17,12 +17,13 @@ $(document).ready(function(){
             for (var key in batters){
                 data.push({position:batters[key]["position"], player:batters[key]["player"], salary:batters[key]["salary"], points:batters[key]["points"], playerteam:batters[key]["playerteam"]});
             }
-            pitchers.sort(function(a,b){
-                return parseFloat(b["points"] - a["points"]);
-            })
-            batters.sort(function(a,b){
-                return parseFloat(b["points"] - a["points"]);
-            });
+            // Commented Code below can be used to sort by points later... can do that.
+            // pitchers.sort(function(a,b){
+            //     return parseFloat(b["points"] - a["points"]);
+            // })  
+            // batters.sort(function(a,b){
+            //     return parseFloat(b["points"] - a["points"]);
+            // });
             paginate_data(pitchers, 'pitchers');
             paginate_data(batters, 'batters');
         }
@@ -99,10 +100,10 @@ $(document).ready(function(){
 
     $('.search-input-mlb').on('keyup', function(){
         //assume that when can access mlb search that batters or hitters must be hidden
-        var $thisInput = $(this).val(),
-            regex = new RegExp($thisInput, "i");
+        var searchInput = $(this).val(),
+            regex = new RegExp(searchInput, "i");
         if(!$('.pitchersSection').hasClass('hidden')){
-            if($thisInput == ""){
+            if(searchInput == ""){
                 paginate_data(pitchers, 'pitchers');
             }
             else{
@@ -110,11 +111,67 @@ $(document).ready(function(){
             }
         }
         else{
-            if($thisInput == ""){
+            if(searchInput == ""){
                 paginate_data(batters, 'batters');
             }
             else{
                 search_players(batters,regex, 'batters');
+            }
+        }
+    });
+    //Remove player from data and respective player list
+    $('table').on('click', '.removePlayer', function(){
+        var $this = $(this),
+            playerType = $this.parent().prev().find('input').data('player-type');
+            playerName = $this.parent().prevAll().eq(5).text().replace(/[0-9]+\.\s/,""),
+            $thisTr = $this.parent().parent();
+        if(playerType == 'pitchers'){
+            for(var key in pitchers){
+                if(pitchers[key]['player'] == playerName){
+                    pitchers.splice(key,1);
+                }
+            }
+        }
+        else if(playerType == 'batters'){
+            for(var key in batters){
+                if(batters[key]['player'] == playerName){
+                    batters.splice(key,1);
+                }
+            }
+        }
+        //currently only mlb is in data so this is okay... when it is hockey too then it might be problematic 
+        for(var key in data){
+            if(data[key].player == playerName){
+                data.splice(key,1);
+            }
+        }
+        $thisTr.remove();
+    });
+
+    //Change projected points
+    $('table').on('keyup', '.points-input', function(){
+        var $this = $(this),
+            playerName = $this.parent().prevAll().eq(4).text().replace(/[0-9]+\.\s/,"");
+            newPoints = $this.val() == "" ? 0 : $this.val(),
+            playerType = $this.data('player-type');
+        if(playerType == 'pitchers'){
+            for(var key in pitchers){
+                if(pitchers[key]['player'] == playerName){
+                    pitchers[key]['points'] = newPoints;
+                }
+            }
+        }
+        else if(playerType == 'batters'){
+            for(var key in batters){
+                if(batters[key]['player'] == playerName){
+                    batters[key]['points'] = newPoints;
+                }
+            }
+        }
+        //currently only mlb is in data so this is okay... when it is hockey too then it might be problematic 
+        for(var key in data){
+            if(data[key].player == playerName){
+                data[key].points = newPoints;
             }
         }
     });

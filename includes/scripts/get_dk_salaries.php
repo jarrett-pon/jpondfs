@@ -31,6 +31,12 @@
 				return "Melvin Upton";
 			case "Mike Clevinger":
 				return "Michael Clevinger";
+			case "Joe Musgrove":
+				return "Joseph Musgrove";
+			case "Buck Farmer":
+				return "Joe Farmer";
+			case "Manny Pina":
+				return "Manuel Pina";
 			default:
 				return $player_name;
 		}
